@@ -1,135 +1,100 @@
 // swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-// sdk-version:2.24.2
+// sdk-version:2.24.3
+
 import PackageDescription
 
 let package = Package(
-    name: "KakaoOpenSDK",
-    defaultLocalization: "ko",
+    name: "KakaoPartnerSDK",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "KakaoSDK",
-            targets: ["KakaoSDKCommon", "KakaoSDKAuth", "KakaoSDKUser", "KakaoSDKCert", "KakaoSDKCertCore", "KakaoSDKTalk", "KakaoSDKFriend", "KakaoSDKFriendCore", "KakaoSDKShare", "KakaoSDKNavi", "KakaoSDKTemplate"]),
+            name: "KakaoPartnerSDK",
+            targets: ["KakaoPartnerSDKCommon", "KakaoPartnerSDKAuth", "KakaoPartnerSDKUser", "KakaoPartnerSDKTalk", "KakaoPartnerSDKFriend", "KakaoPartnerSDKShare"]),
         .library(
-            name: "KakaoSDKCommon",
-            targets: ["KakaoSDKCommon"]),        
+            name: "KakaoPartnerSDKCommon",
+            targets: ["KakaoPartnerSDKCommon"]),
         .library(
-            name: "KakaoSDKAuth",
-            targets: ["KakaoSDKAuth"]),
+            name: "KakaoPartnerSDKAuth",
+            targets: ["KakaoPartnerSDKAuth"]),
         .library(
-            name: "KakaoSDKUser",
-            targets: ["KakaoSDKUser"]),
+            name: "KakaoPartnerSDKUser",
+            targets: ["KakaoPartnerSDKUser"]),
         .library(
-            name: "KakaoSDKCert",
-            targets: ["KakaoSDKCert"]),
+            name: "KakaoPartnerSDKTalk",
+            targets: ["KakaoPartnerSDKTalk"]),
         .library(
-            name: "KakaoSDKCertCore",
-            targets: ["KakaoSDKCertCore"]),
+            name: "KakaoPartnerSDKFriend",
+            targets: ["KakaoPartnerSDKFriend"]),
         .library(
-            name: "KakaoSDKTalk",
-            targets: ["KakaoSDKTalk"]),
+            name: "KakaoPartnerSDKShare",
+            targets: ["KakaoPartnerSDKShare"]),
         .library(
-            name: "KakaoSDKFriend",
-            targets: ["KakaoSDKFriend"]),
-        .library(
-            name: "KakaoSDKFriendCore",
-            targets: ["KakaoSDKFriendCore"]),
-        .library(
-            name: "KakaoSDKShare",
-            targets: ["KakaoSDKShare"]),
-        .library(
-            name: "KakaoSDKNavi",
-            targets: ["KakaoSDKNavi"]),
-        .library(
-            name: "KakaoSDKTemplate",
-            targets: ["KakaoSDKTemplate"])
+            name: "KakaoPartnerSDKFriendDelegate",
+            targets: ["KakaoPartnerSDKFriendDelegate"]
+        )
     ],
     dependencies: [
-        .package(name: "Alamofire",
-                  url: "https://github.com/Alamofire/Alamofire.git",
-                  Version(5,9,0)..<Version(6,0,0))
+        .package(name: "KakaoOpenSDK",
+                 url: "https://github.com/kakao/kakao-ios-sdk.git",
+                 .exact("2.24.3")
+                )
     ],
     targets: [
         .target(
-            name: "KakaoSDKCommon",
+            name: "KakaoPartnerSDKCommon",
             dependencies: [
-                .product(name: "Alamofire", package: "Alamofire"),
-            ],
-            exclude: ["Info.plist", "README.md"],
-            resources: [
-                .process("PrivacyInfo.xcprivacy")
-            ]
-        ),
-        .target(
-            name: "KakaoSDKAuth",
-            dependencies: [
-                .product(name: "Alamofire", package: "Alamofire"),
-                .target(name: "KakaoSDKCommon")
+                .product(name: "KakaoSDKCommon", package: "KakaoOpenSDK"),
             ],
             exclude: ["Info.plist", "README.md"]
         ),
         .target(
-            name: "KakaoSDKUser",
+            name: "KakaoPartnerSDKAuth",
             dependencies: [
-                .target(name: "KakaoSDKAuth")
+                .target(name: "KakaoPartnerSDKCommon"),
+                .product(name: "KakaoSDKAuth", package: "KakaoOpenSDK"),
             ],
             exclude: ["Info.plist", "README.md"]
         ),
         .target(
-            name: "KakaoSDKCert",
+            name: "KakaoPartnerSDKUser",
             dependencies: [
-                .target(name: "KakaoSDKUser"),
-                .target(name: "KakaoSDKCertCore")
-            ],
-            exclude: ["Info.plist", "README.md"]
-        ),
-        .binaryTarget(
-            name: "KakaoSDKCertCore",
-            path: "Sources/KakaoSDKCertCore/KakaoSDKCertCore.xcframework"
-        ),
-        .target(
-            name: "KakaoSDKTalk",
-            dependencies: [
-                .target(name: "KakaoSDKUser"),
-                .target(name: "KakaoSDKTemplate")
+                .target(name: "KakaoPartnerSDKAuth"),
+                .product(name: "KakaoSDKUser", package: "KakaoOpenSDK"),
             ],
             exclude: ["Info.plist", "README.md"]
         ),
         .target(
-            name: "KakaoSDKFriend",
+            name: "KakaoPartnerSDKTalk",
             dependencies: [
-                .target(name: "KakaoSDKUser"),
-                .target(name: "KakaoSDKFriendCore")
-            ],
-            exclude: ["Info.plist", "README.md"]
-        ),
-        .binaryTarget(
-            name: "KakaoSDKFriendCore",
-            path: "Sources/KakaoSDKFriendCore/KakaoSDKFriendCore.xcframework"
-        ),
-        .target(
-            name: "KakaoSDKShare",
-            dependencies: [
-                .target(name: "KakaoSDKCommon"),
-                .target(name: "KakaoSDKTemplate")
+                .target(name: "KakaoPartnerSDKUser"),
+                .product(name: "KakaoSDKTalk", package: "KakaoOpenSDK"),
             ],
             exclude: ["Info.plist", "README.md"]
         ),
         .target(
-            name: "KakaoSDKNavi",
+            name: "KakaoPartnerSDKFriend",
             dependencies: [
-                .target(name: "KakaoSDKCommon")
+                .target(name: "KakaoPartnerSDKCommon"),
+                .product(name: "KakaoSDKFriend", package: "KakaoOpenSDK"),
             ],
             exclude: ["Info.plist", "README.md"]
         ),
         .target(
-            name: "KakaoSDKTemplate",
+            name: "KakaoPartnerSDKShare",
             dependencies: [
-                .target(name: "KakaoSDKCommon")
+                .target(name: "KakaoPartnerSDKCommon"),
+                .product(name: "KakaoSDKShare", package: "KakaoOpenSDK"),
+            ],
+            exclude: ["Info.plist", "README.md"]
+        ),
+        .target(
+            name: "KakaoPartnerSDKFriendDelegate",
+            dependencies: [
+                .product(name: "KakaoSDKFriendCore", package: "KakaoOpenSDK")
             ],
             exclude: ["Info.plist", "README.md"]
         )
